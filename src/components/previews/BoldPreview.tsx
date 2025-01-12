@@ -27,6 +27,10 @@ export function BoldPreview({
             <feColorMatrix type="saturate" values="1.2" />
           </filter>
 
+          <filter id="soft-shadow">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3"/>
+          </filter>
+
           <pattern
             id="bg-image"
             patternUnits="userSpaceOnUse"
@@ -61,110 +65,88 @@ export function BoldPreview({
       {/* Gradient overlay */}
       <rect width="100%" height="100%" fill="url(#overlay-gradient)" />
 
-      {/* Main image container */}
+      {/* Main image container with shadow */}
       <rect
         x="80"
         y="120"
         width="640"
         height="360"
         fill="url(#bg-image)"
-        rx="8"
+        rx="16"
+        filter="url(#soft-shadow)"
       />
 
       {/* Content grid */}
       <g transform="translate(32, 32)">
-        {/* Left column */}
+        {/* Title section */}
+        <text
+          x="0"
+          y="0"
+          fontSize="48"
+          fontWeight="700"
+          fill="white"
+          dominantBaseline="hanging"
+          filter="url(#soft-shadow)"
+        >
+          {worldName}
+        </text>
+      </g>
+
+      {/* Players section - positioned at bottom */}
+      <g transform="translate(32, 520)">
+        {/* Players title */}
         <g>
-          {/* Title section */}
-          <g>
-            <text
-              x="0"
-              y="0"
-              fontSize="48"
-              fontWeight="800"
-              fill="white"
-              dominantBaseline="hanging"
-            >
-              {worldName}
-            </text>
-            <rect
-              x="0"
-              y="70"
-              width="128"
-              height="8"
-              fill="url(#accent-line)"
-              rx="4"
-            />
-          </g>
-
-          {/* Players section */}
-          <g transform="translate(0, 120)">
-            {/* Players title */}
-            <g>
-              <rect
-                x="0"
-                y="0"
-                width="40"
-                height="40"
-                rx="8"
-                fill="white"
-                fillOpacity="0.2"
-              />
-              <path
-                d="M17 21v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2M23 13a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                transform="translate(8, 8)"
-              />
-              <text
-                x="52"
-                y="28"
-                fontSize="24"
-                fontWeight="bold"
-                fill="white"
-                dominantBaseline="middle"
-              >
-                Players
-              </text>
-            </g>
-
-            {/* Player list */}
-            <g transform="translate(0, 60)">
-              {playerNameList.map((player) => {
-                const index = playerNameList.indexOf(player);
-                const row = Math.floor(index / 2);
-                const col = index % 2;
-                return (
-                  <g
-                    key={player}
-                    transform={`translate(${col * 180}, ${row * 50})`}
-                  >
-                    <rect
-                      width="160"
-                      height="40"
-                      rx="8"
-                      fill={
-                        isDarkMode
-                          ? 'rgba(31, 41, 55, 0.3)'
-                          : 'rgba(255, 255, 255, 0.3)'
-                      }
-                    />
-                    <text
-                      x="16"
-                      y="26"
-                      fill={isDarkMode ? '#fff' : '#000'}
-                      fontSize="14"
-                    >
-                      {player}
-                    </text>
-                  </g>
-                );
-              })}
-            </g>
-          </g>
+          <rect
+            x="0"
+            y="0"
+            width="100"
+            height="32"
+            rx="16"
+            fill="rgba(0, 0, 0, 0.3)"
+          />
+          <text
+            x="16"
+            y="16"
+            fontSize="16"
+            fontWeight="600"
+            fill="white"
+            dominantBaseline="middle"
+          >
+            Players
+          </text>
         </g>
+
+        {/* Player list */}
+        <foreignObject x="110" y="0" width="640" height="40">
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '8px',
+              width: '100%',
+              height: '100%',
+              alignItems: 'center',
+            }}
+          >
+            {playerNameList.map((player) => (
+              <div
+                key={player}
+                style={{
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  padding: '6px 12px',
+                  borderRadius: '16px',
+                  color: 'white',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  display: 'inline-block',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {player}
+              </div>
+            ))}
+          </div>
+        </foreignObject>
       </g>
     </svg>
   );

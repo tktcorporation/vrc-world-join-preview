@@ -5,8 +5,8 @@ import type { CreateSharePreviewOptions } from './types';
 
 export default function App() {
   const [options, setOptions] = useState<CreateSharePreviewOptions>({
-    worldName: 'My Amazing World',
     // 環境変数にあればそこから取得、なければ空文字
+    worldName: import.meta.env.VITE_WORLD_NAME || 'My Amazing World',
     imageUrl: import.meta.env.VITE_IMAGE_URL || '',
     playerNameList: ['Player 1', 'Player 2', 'Player 3'],
     isDarkMode: false,
