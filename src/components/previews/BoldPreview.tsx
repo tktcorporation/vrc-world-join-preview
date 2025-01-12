@@ -68,7 +68,7 @@ export function BoldPreview({
       {/* Main image container with shadow */}
       <rect
         x="80"
-        y="120"
+        y="100"
         width="640"
         height="360"
         fill="url(#bg-image)"
@@ -105,7 +105,7 @@ export function BoldPreview({
       </g>
 
       {/* Players section - positioned at bottom */}
-      <g transform="translate(32, 500)">
+      <g transform="translate(32, 480)">
         {/* Players title */}
         <g>
           <text
