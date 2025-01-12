@@ -4,12 +4,8 @@ import type { CreateSharePreviewOptions } from '../types';
 import { extractDominantColors } from '../utils/colorExtractor';
 import { downloadPreview } from '../utils/downloadPreview';
 import { BoldPreview } from './previews/BoldPreview';
-import { MinimalPreview } from './previews/MinimalPreview';
-import { ModernPreview } from './previews/ModernPreview';
 
 const PREVIEW_COMPONENTS = {
-  modern: ModernPreview,
-  minimal: MinimalPreview,
   bold: BoldPreview,
 } as const;
 
@@ -17,7 +13,7 @@ type PreviewStyle = keyof typeof PREVIEW_COMPONENTS;
 
 export function PreviewGenerator(props: CreateSharePreviewOptions) {
   const previewRef = useRef<SVGSVGElement>(null);
-  const [selectedStyle, setSelectedStyle] = useState<PreviewStyle>('modern');
+  const [selectedStyle, setSelectedStyle] = useState<PreviewStyle>('bold');
   const [colors, setColors] = useState<{
     primary: string;
     secondary: string;
