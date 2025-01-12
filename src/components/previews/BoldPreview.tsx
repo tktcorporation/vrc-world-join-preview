@@ -46,6 +46,25 @@ export function BoldPreview({
             />
           </pattern>
 
+          <pattern
+            id="main-image"
+            patternUnits="userSpaceOnUse"
+            x="80"
+            y="100"
+            width="640"
+            height="360"
+          >
+            <image
+              href={imageUrl}
+              x="0"
+              y="0"
+              width="640"
+              height="360"
+              preserveAspectRatio="xMidYMid slice"
+              crossOrigin="anonymous"
+            />
+          </pattern>
+
           <linearGradient id="overlay-gradient" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor={colors.primary} stopOpacity="0.4" />
             <stop offset="100%" stopColor={colors.secondary} stopOpacity="0.4" />
@@ -71,7 +90,7 @@ export function BoldPreview({
         y="100"
         width="640"
         height="360"
-        fill="url(#bg-image)"
+        fill="url(#main-image)"
         rx="16"
         filter="url(#soft-shadow)"
       />
