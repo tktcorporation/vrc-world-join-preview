@@ -93,39 +93,31 @@ export function BoldPreview({
       </g>
 
       {/* Players section - positioned at bottom */}
-      <g transform="translate(32, 520)">
+      <g transform="translate(32, 500)">
         {/* Players title */}
         <g>
-          <rect
+          <text
             x="0"
             y="0"
-            width="100"
-            height="32"
-            rx="16"
-            fill="rgba(0, 0, 0, 0.3)"
-          />
-          <text
-            x="16"
-            y="16"
-            fontSize="16"
+            fontSize="14"
             fontWeight="600"
-            fill="white"
-            dominantBaseline="middle"
+            fill="rgba(255, 255, 255, 0.7)"
+            dominantBaseline="hanging"
+            letterSpacing="0.05em"
           >
-            Players
+            PLAYERS
           </text>
         </g>
 
         {/* Player list */}
-        <foreignObject x="110" y="0" width="640" height="40">
+        <foreignObject x="0" y="24" width="740" height="76">
           <div
             style={{
               display: 'flex',
               flexWrap: 'wrap',
               gap: '8px',
               width: '100%',
-              height: '100%',
-              alignItems: 'center',
+              alignContent: 'flex-start',
             }}
           >
             {playerNameList.map((player) => (
