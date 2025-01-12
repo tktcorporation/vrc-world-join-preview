@@ -1,8 +1,7 @@
 import { Download, RefreshCw } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CreateSharePreviewOptions } from '../types';
 import { extractDominantColors } from '../utils/colorExtractor';
-import { downloadPreview } from '../utils/downloadPreview';
 import { BoldPreview } from './previews/BoldPreview';
 
 const PREVIEW_COMPONENTS = {
