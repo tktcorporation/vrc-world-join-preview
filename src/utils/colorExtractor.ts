@@ -48,6 +48,7 @@ interface ColorBucket {
   g: number;
   b: number;
   count: number;
+  hsl: [number, number, number];
 }
 
 export function extractDominantColors(img: HTMLImageElement) {
@@ -55,44 +56,62 @@ export function extractDominantColors(img: HTMLImageElement) {
   const data = imageData.data;
   const colorBuckets: { [key: string]: ColorBucket } = {};
 
-  // 色のバケット化（似た色をグループ化）
+  // より細かい精度で色をバケット化（5単位）
   for (let i = 0; i < data.length; i += 4) {
-    const r = Math.floor(data[i] / 10) * 10;
-    const g = Math.floor(data[i + 1] / 10) * 10;
-    const b = Math.floor(data[i + 2] / 10) * 10;
+    const r = Math.floor(data[i] / 5) * 5;
+    const g = Math.floor(data[i + 1] / 5) * 5;
+    const b = Math.floor(data[i + 2] / 5) * 5;
+    const alpha = data[i + 3] / 255;
+
+    // 透明な部分はスキップ
+    if (alpha < 0.5) continue;
 
     // HSLに変換して彩度と明度をチェック
-    const [, s, l] = rgbToHsl(r, g, b);
+    const hsl = rgbToHsl(r, g, b);
+    const [, s, l] = hsl;
 
-    // 彩度が低すぎる、または明度が極端な色は除外
-    if (s < 0.1 || l < 0.1 || l > 0.9) continue;
+    // 彩度が20%未満、または明度が極端な色は除外
+    if (s < 20 || l < 15 || l > 85) continue;
 
     const key = `${r},${g},${b}`;
 
     if (colorBuckets[key]) {
       colorBuckets[key].count++;
     } else {
-      colorBuckets[key] = { r, g, b, count: 1 };
+      colorBuckets[key] = { r, g, b, count: 1, hsl };
     }
   }
 
   // 出現頻度でソート
   const sortedColors = Object.values(colorBuckets)
     .sort((a, b) => b.count - a.count)
-    .filter((bucket) => bucket.count > 50); // ノイズ除去
+    .filter((bucket) => bucket.count > 20); // より低い閾値に調整
 
-  // 最も出現頻度の高い色を取得
-  const primary = sortedColors[0] || { r: 59, g: 130, b: 246 };
-  const secondary = sortedColors[Math.floor(sortedColors.length / 3)] || {
-    r: 147,
-    g: 51,
-    b: 234,
-  };
-  const accent = sortedColors[Math.floor(sortedColors.length / 2)] || {
-    r: 79,
-    g: 70,
-    b: 229,
-  };
+  if (sortedColors.length === 0) {
+    // デフォルトの色を返す
+    return {
+      primary: 'rgb(59, 130, 246)',
+      secondary: 'rgb(147, 51, 234)',
+      accent: 'rgb(79, 70, 229)',
+    };
+  }
+
+  // 色相でグループ化して、異なる色相の色を選択
+  const hueGroups: { [key: number]: ColorBucket[] } = {};
+  for (const color of sortedColors) {
+    const hueGroup = Math.floor(color.hsl[0] / 30);
+    if (!hueGroups[hueGroup]) {
+      hueGroups[hueGroup] = [];
+    }
+    hueGroups[hueGroup].push(color);
+  }
+
+  const hueGroupsArray = Object.values(hueGroups)
+    .sort((a, b) => b[0].count - a[0].count);
+
+  const primary = hueGroupsArray[0]?.[0] || sortedColors[0];
+  const secondary = hueGroupsArray[1]?.[0] || sortedColors[Math.floor(sortedColors.length / 3)];
+  const accent = hueGroupsArray[2]?.[0] || sortedColors[Math.floor(sortedColors.length / 2)];
 
   return {
     primary: `rgb(${primary.r}, ${primary.g}, ${primary.b})`,
