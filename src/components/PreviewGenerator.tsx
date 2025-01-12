@@ -36,7 +36,7 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
       canvas.height = img.height;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
-      
+
       ctx.drawImage(img, 0, 0);
       const base64 = canvas.toDataURL('image/png');
       setImageBase64(base64);
@@ -49,7 +49,9 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
   const handleDownloadSvg = () => {
     if (!previewRef.current) return;
     const svgData = new XMLSerializer().serializeToString(previewRef.current);
-    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const svgBlob = new Blob([svgData], {
+      type: 'image/svg+xml;charset=utf-8',
+    });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(svgBlob);
     link.download = `${props.worldName || 'preview'}.svg`;
@@ -59,12 +61,15 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
 
   const handleDownloadPng = async () => {
     if (!previewRef.current || !imageBase64) return;
-    
+
     // SVGをクローンして修正
     const svgElement = previewRef.current.cloneNode(true) as SVGSVGElement;
-    
+
     // インラインスタイルを追加
-    const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    const styleElement = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'style'
+    );
     styleElement.textContent = `
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
       text, div {
@@ -75,34 +80,34 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
       }
     `;
     svgElement.insertBefore(styleElement, svgElement.firstChild);
-    
+
     // foreignObject内のdivにもフォントを直接設定
     const foreignDivs = svgElement.getElementsByTagName('div');
     for (const div of foreignDivs) {
       div.style.fontFamily = 'Inter, sans-serif';
     }
-    
+
     // SVGをデータURLに変換
     const svgData = new XMLSerializer().serializeToString(svgElement);
     const modifiedSvgData = svgData.replace(
       new RegExp(props.imageUrl, 'g'),
       imageBase64
     );
-    
+
     // SVGをbase64エンコード
     const svgBase64 = btoa(unescape(encodeURIComponent(modifiedSvgData)));
     const svgDataUrl = `data:image/svg+xml;base64,${svgBase64}`;
-    
+
     // フォントを読み込む
     await document.fonts.load('700 1em Inter');
     await document.fonts.load('600 1em Inter');
     await document.fonts.load('500 1em Inter');
     await document.fonts.load('400 1em Inter');
-    
+
     // 新しい画像として読み込む
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    
+
     return new Promise<void>((resolve, reject) => {
       img.onload = () => {
         const canvas = document.createElement('canvas');
@@ -113,14 +118,14 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
           reject(new Error('Failed to get canvas context'));
           return;
         }
-        
+
         // 背景を透明に
         ctx.fillStyle = 'transparent';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
+
         // 画像を描画
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        
+
         try {
           // PNGとしてエクスポート
           const pngDataUrl = canvas.toDataURL('image/png');
@@ -133,11 +138,11 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
           reject(error);
         }
       };
-      
+
       img.onerror = () => {
         reject(new Error('Failed to load SVG'));
       };
-      
+
       img.src = svgDataUrl;
     }).catch((error) => {
       console.error('Failed to convert to PNG:', error);
@@ -145,7 +150,7 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
   };
 
   const handleRefresh = () => {
-    setKey(prev => prev + 1);
+    setKey((prev) => prev + 1);
   };
 
   const PreviewComponent = PREVIEW_COMPONENTS[selectedStyle];

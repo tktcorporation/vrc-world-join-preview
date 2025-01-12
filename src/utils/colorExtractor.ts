@@ -106,12 +106,15 @@ export function extractDominantColors(img: HTMLImageElement) {
     hueGroups[hueGroup].push(color);
   }
 
-  const hueGroupsArray = Object.values(hueGroups)
-    .sort((a, b) => b[0].count - a[0].count);
+  const hueGroupsArray = Object.values(hueGroups).sort(
+    (a, b) => b[0].count - a[0].count
+  );
 
   const primary = hueGroupsArray[0]?.[0] || sortedColors[0];
-  const secondary = hueGroupsArray[1]?.[0] || sortedColors[Math.floor(sortedColors.length / 3)];
-  const accent = hueGroupsArray[2]?.[0] || sortedColors[Math.floor(sortedColors.length / 2)];
+  const secondary =
+    hueGroupsArray[1]?.[0] || sortedColors[Math.floor(sortedColors.length / 3)];
+  const accent =
+    hueGroupsArray[2]?.[0] || sortedColors[Math.floor(sortedColors.length / 2)];
 
   return {
     primary: `rgb(${primary.r}, ${primary.g}, ${primary.b})`,

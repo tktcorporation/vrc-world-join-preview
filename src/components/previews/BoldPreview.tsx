@@ -1,6 +1,6 @@
-import type { PreviewProps } from './types';
 import { useEffect, useRef, useState } from 'react';
 import { PLAYER_COUNT_SUFFIX } from '../../types';
+import type { PreviewProps } from './types';
 
 export function BoldPreview({
   worldName,
@@ -29,11 +29,11 @@ export function BoldPreview({
     const containerWidth = 740; // 固定の幅
     const gap = 8;
     const visible: string[] = [];
-    
+
     // +N more 表示用の余白を確保（およそ100px）
     const reservedWidth = 100;
     const effectiveWidth = containerWidth - reservedWidth;
-    
+
     let currentRow = 0;
     let currentWidth = 0;
 
@@ -50,7 +50,7 @@ export function BoldPreview({
     for (const player of playerNameList) {
       tempDiv.textContent = player;
       const width = tempDiv.offsetWidth;
-      
+
       if (currentWidth + width + gap > effectiveWidth) {
         currentRow++;
         currentWidth = width + gap;
@@ -81,7 +81,9 @@ export function BoldPreview({
 
   const previewHeight = calculatePreviewHeight();
   const playersSectionY = 480;
-  const playerListHeight = showAllPlayers ? previewHeight - playersSectionY - 40 : 76; // 余白を40pxに調整
+  const playerListHeight = showAllPlayers
+    ? previewHeight - playersSectionY - 40
+    : 76; // 余白を40pxに調整
 
   return (
     <svg
@@ -103,7 +105,7 @@ export function BoldPreview({
           </filter>
 
           <filter id="soft-shadow">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3"/>
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3" />
           </filter>
 
           <pattern
@@ -147,16 +149,20 @@ export function BoldPreview({
             />
           </pattern>
 
-          <linearGradient 
-            id="overlay-gradient" 
-            x1="0" 
-            y1="0" 
-            x2="0" 
-            y2={previewHeight} 
+          <linearGradient
+            id="overlay-gradient"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2={previewHeight}
             gradientUnits="userSpaceOnUse"
           >
             <stop offset="0%" stopColor={colors.primary} stopOpacity="0.4" />
-            <stop offset="100%" stopColor={colors.secondary} stopOpacity="0.4" />
+            <stop
+              offset="100%"
+              stopColor={colors.secondary}
+              stopOpacity="0.4"
+            />
           </linearGradient>
         </>
       </defs>
@@ -171,11 +177,7 @@ export function BoldPreview({
       />
 
       {/* Gradient overlay */}
-      <rect 
-        width="100%" 
-        height="100%" 
-        fill="url(#overlay-gradient)" 
-      />
+      <rect width="100%" height="100%" fill="url(#overlay-gradient)" />
 
       {/* Main image container with shadow */}
       <rect
@@ -234,13 +236,11 @@ export function BoldPreview({
         </g>
 
         {/* Player list */}
-        <foreignObject 
-          x="0" 
-          y="24" 
-          width="740" 
-          height={playerListHeight}
-        >
-          <div ref={tempContainerRef} style={{ position: 'absolute', visibility: 'hidden' }} />
+        <foreignObject x="0" y="24" width="740" height={playerListHeight}>
+          <div
+            ref={tempContainerRef}
+            style={{ position: 'absolute', visibility: 'hidden' }}
+          />
           <div
             ref={containerRef}
             style={{
@@ -255,27 +255,29 @@ export function BoldPreview({
               paddingBottom: '16px',
             }}
           >
-            {(showAllPlayers ? playerNameList : visiblePlayers).map((player) => (
-              <div
-                key={player}
-                style={{
-                  background: 'rgba(0, 0, 0, 0.3)',
-                  padding: '6px 12px',
-                  borderRadius: '16px',
-                  color: 'white',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  display: 'inline-block',
-                  whiteSpace: 'nowrap',
-                  marginBottom: '2px',
-                  height: '30px',
-                  lineHeight: '18px',
-                  boxSizing: 'border-box',
-                }}
-              >
-                {player}
-              </div>
-            ))}
+            {(showAllPlayers ? playerNameList : visiblePlayers).map(
+              (player) => (
+                <div
+                  key={player}
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    padding: '6px 12px',
+                    borderRadius: '16px',
+                    color: 'white',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    display: 'inline-block',
+                    whiteSpace: 'nowrap',
+                    marginBottom: '2px',
+                    height: '30px',
+                    lineHeight: '18px',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  {player}
+                </div>
+              )
+            )}
             {!showAllPlayers && hiddenCount > 0 && (
               <div
                 style={{
@@ -293,7 +295,8 @@ export function BoldPreview({
                   boxSizing: 'border-box',
                 }}
               >
-                +{hiddenCount}{PLAYER_COUNT_SUFFIX}
+                +{hiddenCount}
+                {PLAYER_COUNT_SUFFIX}
               </div>
             )}
           </div>
