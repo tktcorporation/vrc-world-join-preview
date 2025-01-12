@@ -1,5 +1,5 @@
+import { Moon, Settings2, Sun, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { Moon, Sun, Settings2, X } from 'lucide-react';
 import { PreviewGenerator } from './components/PreviewGenerator';
 import type { CreateSharePreviewOptions } from './types';
 
@@ -30,6 +30,7 @@ export default function App() {
           <h1 className="text-3xl font-bold">Preview Generator</h1>
           <div className="flex items-center gap-4">
             <button
+              type="button"
               onClick={() => setShowSettings(!showSettings)}
               className={`p-2 rounded-full ${
                 options.isDarkMode ? 'bg-gray-700' : 'bg-white'
@@ -38,6 +39,7 @@ export default function App() {
               {showSettings ? <X size={24} /> : <Settings2 size={24} />}
             </button>
             <button
+              type="button"
               onClick={toggleDarkMode}
               className={`p-2 rounded-full ${
                 options.isDarkMode ? 'bg-gray-700' : 'bg-white'

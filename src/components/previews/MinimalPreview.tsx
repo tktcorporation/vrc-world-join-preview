@@ -20,6 +20,7 @@ export function MinimalPreview({
         background: isDarkMode ? '#111827' : '#ffffff',
       }}
     >
+      <title>VRChat World Join Preview - Minimal Style</title>
       <defs>
         {imageUrl && (
           <>
@@ -99,32 +100,38 @@ export function MinimalPreview({
                 y="0"
                 fontSize="12"
                 fontWeight="600"
-                fill={isDarkMode ? 'white' : 'black'}
+                fill={isDarkMode ? '#fff' : '#000'}
                 letterSpacing="0.1em"
-                textTransform="uppercase"
                 dominantBaseline="hanging"
               >
-                Players
+                PLAYERS
               </text>
             </g>
 
             {/* Player list */}
             <g transform="translate(0, 40)">
-              {playerNameList.map((player, index) => (
-                <g key={index} transform={`translate(0, ${index * 36})`}>
+              {playerNameList.map((player) => (
+                <g
+                  key={player}
+                  transform={`translate(0, ${
+                    playerNameList.indexOf(player) * 36
+                  })`}
+                >
                   <rect
                     width="200"
-                    height="28"
+                    height="30"
                     rx="6"
                     fill={
-                      isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
+                      isDarkMode
+                        ? 'rgba(31, 41, 55, 0.3)'
+                        : 'rgba(255, 255, 255, 0.3)'
                     }
                   />
                   <text
-                    x="12"
-                    y="14"
-                    fontSize="13"
-                    fill={isDarkMode ? 'white' : 'black'}
+                    x="16"
+                    y="20"
+                    fill={isDarkMode ? '#fff' : '#000'}
+                    fontSize="14"
                     dominantBaseline="middle"
                   >
                     {player}

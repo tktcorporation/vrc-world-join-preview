@@ -20,6 +20,7 @@ export function BoldPreview({
         background: isDarkMode ? '#111827' : '#ffffff',
       }}
     >
+      <title>VRChat World Join Preview - Bold Style</title>
       <defs>
         {imageUrl && (
           <>
@@ -149,28 +150,30 @@ export function BoldPreview({
 
               {/* Player list */}
               <g transform="translate(0, 60)">
-                {playerNameList.map((player, index) => {
+                {playerNameList.map((player) => {
+                  const index = playerNameList.indexOf(player);
                   const row = Math.floor(index / 2);
                   const col = index % 2;
                   return (
                     <g
-                      key={index}
+                      key={player}
                       transform={`translate(${col * 180}, ${row * 50})`}
                     >
                       <rect
                         width="160"
                         height="40"
                         rx="8"
-                        fill="white"
-                        fillOpacity="0.1"
+                        fill={
+                          isDarkMode
+                            ? 'rgba(31, 41, 55, 0.3)'
+                            : 'rgba(255, 255, 255, 0.3)'
+                        }
                       />
                       <text
                         x="16"
-                        y="20"
+                        y="26"
+                        fill={isDarkMode ? '#fff' : '#000'}
                         fontSize="14"
-                        fontWeight="500"
-                        fill="white"
-                        dominantBaseline="middle"
                       >
                         {player}
                       </text>

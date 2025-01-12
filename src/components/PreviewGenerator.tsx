@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
 import { Download } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { CreateSharePreviewOptions } from '../types';
-import { ModernPreview } from './previews/ModernPreview';
-import { MinimalPreview } from './previews/MinimalPreview';
-import { BoldPreview } from './previews/BoldPreview';
-import { downloadPreview } from '../utils/downloadPreview';
 import { extractDominantColors } from '../utils/colorExtractor';
+import { downloadPreview } from '../utils/downloadPreview';
+import { BoldPreview } from './previews/BoldPreview';
+import { MinimalPreview } from './previews/MinimalPreview';
+import { ModernPreview } from './previews/ModernPreview';
 
 const PREVIEW_COMPONENTS = {
   modern: ModernPreview,
@@ -55,12 +55,15 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
         <div className="flex gap-4 mb-4">
           {Object.keys(PREVIEW_COMPONENTS).map((style) => (
             <button
+              type="button"
               key={style}
               onClick={() => setSelectedStyle(style as PreviewStyle)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                 selectedStyle === style
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                  : props.isDarkMode
+                    ? 'bg-gray-800 text-white'
+                    : 'bg-white text-gray-900'
               }`}
             >
               {style.charAt(0).toUpperCase() + style.slice(1)}
@@ -71,6 +74,7 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
         <PreviewComponent {...props} colors={colors} previewRef={previewRef} />
 
         <button
+          type="button"
           onClick={handleDownload}
           className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium shadow-lg"
         >

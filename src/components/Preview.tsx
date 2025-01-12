@@ -1,5 +1,5 @@
-import React from 'react';
 import { Users } from 'lucide-react';
+import React from 'react';
 import type { CreateSharePreviewOptions } from '../types';
 
 interface PreviewProps extends Omit<CreateSharePreviewOptions, 'isDarkMode'> {
@@ -126,14 +126,14 @@ export function Preview({
                   } p-4 backdrop-blur-sm`}
                 >
                   <div className="grid gap-2">
-                    {playerNameList.map((player, index) => (
+                    {playerNameList.map((player) => (
                       <div
-                        key={index}
+                        key={player}
                         className={`p-3 rounded-xl ${
                           isDarkMode ? 'bg-gray-800/30' : 'bg-white/30'
-                        } backdrop-blur-sm`}
+                        }`}
                       >
-                        <span className="text-base font-medium">{player}</span>
+                        {player}
                       </div>
                     ))}
                   </div>

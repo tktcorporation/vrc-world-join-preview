@@ -13,13 +13,14 @@ export function ModernPreview({
     <svg
       ref={previewRef}
       width="800"
-      height="600"
-      viewBox="0 0 800 600"
+      height="400"
+      viewBox="0 0 800 400"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        background: isDarkMode ? '#111827' : '#ffffff',
+        fontFamily: 'system-ui, sans-serif',
       }}
     >
+      <title>VRChat World Join Preview</title>
       <defs>
         {imageUrl && (
           <>
@@ -162,26 +163,28 @@ export function ModernPreview({
 
               {/* Player list */}
               <g transform="translate(0, 60)">
-                {playerNameList.map((player, index) => (
-                  <g key={index} transform={`translate(0, ${index * 50})`}>
+                {playerNameList.map((player) => (
+                  <g
+                    key={player}
+                    transform={`translate(0, ${
+                      playerNameList.indexOf(player) * 50
+                    })`}
+                  >
                     <rect
                       width="250"
                       height="40"
-                      rx="12"
+                      rx="8"
                       fill={
                         isDarkMode
-                          ? 'rgba(255,255,255,0.05)'
-                          : 'rgba(0,0,0,0.05)'
+                          ? 'rgba(31, 41, 55, 0.3)'
+                          : 'rgba(255, 255, 255, 0.3)'
                       }
-                      stroke={`${colors.primary}25`}
                     />
                     <text
-                      x="16"
-                      y="20"
-                      fontSize="14"
-                      fontWeight="500"
-                      fill={isDarkMode ? 'white' : 'black'}
-                      dominantBaseline="middle"
+                      x="20"
+                      y="26"
+                      fill={isDarkMode ? '#fff' : '#000'}
+                      fontSize="16"
                     >
                       {player}
                     </text>

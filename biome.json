@@ -6,7 +6,16 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "suspicious": {
+        "noCommentText": "off"
+      }
+    },
+    "ignore": ["node_modules/**/*"]
+  },
+  "json": {
+    "parser": {
+      "allowComments": true
     }
   },
   "formatter": {
