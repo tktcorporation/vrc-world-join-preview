@@ -100,16 +100,23 @@ export function BoldPreview({
           <pattern
             id="bg-image"
             patternUnits="userSpaceOnUse"
-            width="100%"
-            height="100%"
+            width="800"
+            height={previewHeight}
           >
-            <image
-              href={imageUrl}
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-              crossOrigin="anonymous"
-            />
+            <g transform={`translate(400 ${previewHeight / 2})`}>
+              <image
+                href={imageUrl}
+                x="-600"
+                y={-previewHeight}
+                width="1200"
+                height={previewHeight * 2}
+                preserveAspectRatio="xMidYMid slice"
+                crossOrigin="anonymous"
+                style={{
+                  transformOrigin: 'center center',
+                }}
+              />
+            </g>
           </pattern>
 
           <pattern
@@ -131,14 +138,21 @@ export function BoldPreview({
             />
           </pattern>
 
-          <linearGradient id="overlay-gradient" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient 
+            id="overlay-gradient" 
+            x1="0" 
+            y1="0" 
+            x2="0" 
+            y2={previewHeight} 
+            gradientUnits="userSpaceOnUse"
+          >
             <stop offset="0%" stopColor={colors.primary} stopOpacity="0.4" />
             <stop offset="100%" stopColor={colors.secondary} stopOpacity="0.4" />
           </linearGradient>
         </>
       </defs>
 
-      {/* Background image with blur - 高さを調整 */}
+      {/* Background image with blur */}
       <rect
         width="100%"
         height="100%"
@@ -147,8 +161,12 @@ export function BoldPreview({
         opacity="0.8"
       />
 
-      {/* Gradient overlay - 高さを調整 */}
-      <rect width="100%" height="100%" fill="url(#overlay-gradient)" />
+      {/* Gradient overlay */}
+      <rect 
+        width="100%" 
+        height="100%" 
+        fill="url(#overlay-gradient)" 
+      />
 
       {/* Main image container with shadow */}
       <rect
