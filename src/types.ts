@@ -1,6 +1,6 @@
 export interface CreateSharePreviewOptions {
-  worldName: string | null;
-  imageUrl: string | null;
-  playerNameList: string[] | null;
+  worldName: string;
+  imageUrl: string;
+  playerNameList: string[];
   isDarkMode: boolean;
 }

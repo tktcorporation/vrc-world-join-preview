@@ -25,15 +25,13 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
   });
 
   useEffect(() => {
-    if (props.imageUrl) {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.src = props.imageUrl;
-      img.onload = () => {
-        const extractedColors = extractDominantColors(img);
-        setColors(extractedColors);
-      };
-    }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = props.imageUrl;
+    img.onload = () => {
+      const extractedColors = extractDominantColors(img);
+      setColors(extractedColors);
+    };
   }, [props.imageUrl]);
 
   const handleDownload = async () => {

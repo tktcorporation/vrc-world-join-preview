@@ -55,7 +55,7 @@ export default function App() {
                   <label className="block mb-2">World Name</label>
                   <input
                     type="text"
-                    value={options.worldName || ''}
+                    value={options.worldName}
                     onChange={(e) => setOptions(prev => ({
                       ...prev,
                       worldName: e.target.value
@@ -68,7 +68,7 @@ export default function App() {
                   <label className="block mb-2">Image URL</label>
                   <input
                     type="text"
-                    value={options.imageUrl || ''}
+                    value={options.imageUrl}
                     onChange={(e) => setOptions(prev => ({
                       ...prev,
                       imageUrl: e.target.value
@@ -80,7 +80,7 @@ export default function App() {
                 <div>
                   <label className="block mb-2">Players (one per line)</label>
                   <textarea
-                    value={options.playerNameList?.join('\n') || ''}
+                    value={options.playerNameList.join('\n')}
                     onChange={(e) => setOptions(prev => ({
                       ...prev,
                       playerNameList: e.target.value.split('\n').filter(Boolean)
