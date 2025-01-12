@@ -17,7 +17,8 @@
         "ms-azuretools.vscode-docker",
         "GitHub.copilot",
         "mhutchie.git-graph",
-        "WakaTime.vscode-wakatime"
+        "WakaTime.vscode-wakatime",
+        "biomejs.biome"
       ],
       "files.watcherExclude": {
         "**/.git/*/**": true,
