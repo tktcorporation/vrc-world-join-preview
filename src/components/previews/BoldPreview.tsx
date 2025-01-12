@@ -1,4 +1,3 @@
-import React from 'react';
 import type { PreviewProps } from './types';
 
 export function BoldPreview({
@@ -17,15 +16,15 @@ export function BoldPreview({
       viewBox="0 0 800 600"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        background: isDarkMode ? '#111827' : '#ffffff',
+        background: '#7FB5B5',
       }}
     >
       <title>VRChat World Join Preview - Bold Style</title>
       <defs>
         <>
           <filter id="blur-effect">
-            <feGaussianBlur stdDeviation="80" />
-            <feColorMatrix type="saturate" values="1.5" />
+            <feGaussianBlur stdDeviation="40" />
+            <feColorMatrix type="saturate" values="1.2" />
           </filter>
 
           <pattern
@@ -44,41 +43,33 @@ export function BoldPreview({
           </pattern>
 
           <linearGradient id="overlay-gradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor={colors.primary} stopOpacity="0.9" />
-            <stop
-              offset="100%"
-              stopColor={colors.secondary}
-              stopOpacity="0.9"
-            />
-          </linearGradient>
-
-          <linearGradient id="accent-line" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor={colors.accent} />
-            <stop offset="100%" stopColor={colors.accent} stopOpacity="0" />
+            <stop offset="0%" stopColor={colors.primary} stopOpacity="0.4" />
+            <stop offset="100%" stopColor={colors.secondary} stopOpacity="0.4" />
           </linearGradient>
         </>
       </defs>
 
-      {/* Main image */}
-      <image
-        href={imageUrl}
-        width="800"
-        height="600"
-        preserveAspectRatio="xMidYMid slice"
-        crossOrigin="anonymous"
+      {/* Background image with blur */}
+      <rect
+        width="100%"
+        height="100%"
+        fill="url(#bg-image)"
+        filter="url(#blur-effect)"
+        opacity="0.8"
       />
 
-      {/* Background layers */}
-      <>
-        <rect
-          width="100%"
-          height="100%"
-          fill="url(#bg-image)"
-          filter="url(#blur-effect)"
-          opacity="0.6"
-        />
-        <rect width="100%" height="100%" fill="url(#overlay-gradient)" />
-      </>
+      {/* Gradient overlay */}
+      <rect width="100%" height="100%" fill="url(#overlay-gradient)" />
+
+      {/* Main image container */}
+      <rect
+        x="80"
+        y="120"
+        width="640"
+        height="360"
+        fill="url(#bg-image)"
+        rx="8"
+      />
 
       {/* Content grid */}
       <g transform="translate(32, 32)">
