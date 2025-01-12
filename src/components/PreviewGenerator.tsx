@@ -1,4 +1,4 @@
-import { Download } from 'lucide-react';
+import { Download, RefreshCw } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import type { CreateSharePreviewOptions } from '../types';
 import { extractDominantColors } from '../utils/colorExtractor';
@@ -27,24 +27,101 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
     secondary: 'rgb(147, 51, 234)',
     accent: 'rgb(79, 70, 229)',
   });
+  const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.src = props.imageUrl;
     img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      ctx.drawImage(img, 0, 0);
+      const base64 = canvas.toDataURL('image/png');
+      setImageBase64(base64);
+
       const extractedColors = extractDominantColors(img);
       setColors(extractedColors);
     };
   }, [props.imageUrl]);
 
-  const handleDownload = async () => {
+  const handleDownloadSvg = () => {
     if (!previewRef.current) return;
-    await downloadPreview(
-      previewRef.current,
-      props.isDarkMode,
-      props.worldName
+    const svgData = new XMLSerializer().serializeToString(previewRef.current);
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(svgBlob);
+    link.download = `${props.worldName || 'preview'}.svg`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  const handleDownloadPng = async () => {
+    if (!previewRef.current || !imageBase64) return;
+    
+    // SVGをデータURLに変換
+    const svgData = new XMLSerializer().serializeToString(previewRef.current);
+    const modifiedSvgData = svgData.replace(
+      new RegExp(props.imageUrl, 'g'),
+      imageBase64
     );
+    
+    // SVGをbase64エンコード
+    const svgBase64 = btoa(unescape(encodeURIComponent(modifiedSvgData)));
+    const svgDataUrl = `data:image/svg+xml;base64,${svgBase64}`;
+    
+    // 新しい画像として読み込む
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    
+    return new Promise<void>((resolve, reject) => {
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 800 * 2;
+        canvas.height = 600 * 2;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Failed to get canvas context'));
+          return;
+        }
+        
+        // 背景を透明に
+        ctx.fillStyle = 'transparent';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // 画像を描画
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        try {
+          // PNGとしてエクスポート
+          const pngDataUrl = canvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.download = `${props.worldName || 'preview'}.png`;
+          link.href = pngDataUrl;
+          link.click();
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      };
+      
+      img.onerror = () => {
+        reject(new Error('Failed to load SVG'));
+      };
+      
+      img.src = svgDataUrl;
+    }).catch((error) => {
+      console.error('Failed to convert to PNG:', error);
+    });
+  };
+
+  const handleRefresh = () => {
+    setKey(prev => prev + 1);
   };
 
   const PreviewComponent = PREVIEW_COMPONENTS[selectedStyle];
@@ -71,16 +148,43 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
           ))}
         </div>
 
-        <PreviewComponent {...props} colors={colors} previewRef={previewRef} />
+        <div className="relative">
+          <PreviewComponent
+            key={key}
+            {...props}
+            colors={colors}
+            previewRef={previewRef}
+            imageUrl={imageBase64 || props.imageUrl}
+          />
+          <button
+            type="button"
+            onClick={handleRefresh}
+            className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all duration-300"
+            title="プレビューを更新"
+          >
+            <RefreshCw size={20} />
+          </button>
+        </div>
 
-        <button
-          type="button"
-          onClick={handleDownload}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium shadow-lg"
-        >
-          <Download size={20} />
-          Download SVG
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            onClick={handleDownloadSvg}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium shadow-lg"
+          >
+            <Download size={20} />
+            Download SVG
+          </button>
+          <button
+            type="button"
+            onClick={handleDownloadPng}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl hover:from-green-700 hover:to-teal-700 transition-all duration-300 font-medium shadow-lg"
+            disabled={!imageBase64}
+          >
+            <Download size={20} />
+            Download PNG
+          </button>
+        </div>
       </div>
     </div>
   );
