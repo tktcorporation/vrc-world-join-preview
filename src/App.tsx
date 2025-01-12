@@ -10,6 +10,7 @@ export default function App() {
     imageUrl: import.meta.env.VITE_IMAGE_URL || '',
     playerNameList: ['Player 1', 'Player 2', 'Player 3'],
     isDarkMode: false,
+    showAllPlayers: false,
   });
   const [showSettings, setShowSettings] = useState(false);
 
@@ -103,6 +104,24 @@ export default function App() {
                     }
                     className="w-full p-2 rounded border bg-transparent h-32"
                   />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="showAllPlayers"
+                    checked={options.showAllPlayers}
+                    onChange={(e) =>
+                      setOptions((prev) => ({
+                        ...prev,
+                        showAllPlayers: e.target.checked,
+                      }))
+                    }
+                    className="w-4 h-4"
+                  />
+                  <label htmlFor="showAllPlayers">
+                    Show all players (expands preview height)
+                  </label>
                 </div>
               </div>
             </div>

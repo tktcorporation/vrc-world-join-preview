@@ -9,6 +9,7 @@ export function BoldPreview({
   isDarkMode,
   colors,
   previewRef,
+  showAllPlayers = false,
 }: PreviewProps) {
   const [visiblePlayers, setVisiblePlayers] = useState<string[]>([]);
   const [hiddenCount, setHiddenCount] = useState(0);
@@ -18,6 +19,12 @@ export function BoldPreview({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    if (showAllPlayers) {
+      setVisiblePlayers(playerNameList);
+      setHiddenCount(0);
+      return;
+    }
+
     const container = containerRef.current;
     const containerHeight = 76; // 固定の高さ
     const containerWidth = 740; // 固定の幅
@@ -26,7 +33,7 @@ export function BoldPreview({
     const gap = 8;
     const visible: string[] = [];
     
-    // +N人 表示用の余白を確保（およそ100px）
+    // +N more 表示用の余白を確保（およそ100px）
     const reservedWidth = 100;
     const effectiveWidth = containerWidth - reservedWidth;
     
@@ -54,14 +61,25 @@ export function BoldPreview({
 
     setVisiblePlayers(visible);
     setHiddenCount(playerNameList.length - visible.length);
-  }, [playerNameList]);
+  }, [playerNameList, showAllPlayers]);
+
+  // プレビューの高さを動的に計算
+  const calculatePreviewHeight = () => {
+    if (!showAllPlayers) return 600;
+    const playerCount = playerNameList.length;
+    const estimatedRows = Math.ceil(playerCount / 8); // 1行あたり約8人と仮定
+    const additionalHeight = Math.max(0, (estimatedRows - 2) * 40); // 2行以上の場合、1行あたり40pxを追加
+    return 600 + additionalHeight;
+  };
+
+  const previewHeight = calculatePreviewHeight();
 
   return (
     <svg
       ref={previewRef}
       width="800"
-      height="600"
-      viewBox="0 0 800 600"
+      height={previewHeight}
+      viewBox={`0 0 800 ${previewHeight}`}
       xmlns="http://www.w3.org/2000/svg"
       style={{
         background: '#7FB5B5',
@@ -120,7 +138,7 @@ export function BoldPreview({
         </>
       </defs>
 
-      {/* Background image with blur */}
+      {/* Background image with blur - 高さを調整 */}
       <rect
         width="100%"
         height="100%"
@@ -129,7 +147,7 @@ export function BoldPreview({
         opacity="0.8"
       />
 
-      {/* Gradient overlay */}
+      {/* Gradient overlay - 高さを調整 */}
       <rect width="100%" height="100%" fill="url(#overlay-gradient)" />
 
       {/* Main image container with shadow */}
@@ -171,7 +189,7 @@ export function BoldPreview({
         </g>
       </g>
 
-      {/* Players section - positioned at bottom */}
+      {/* Players section - positioned relative to bottom */}
       <g transform="translate(32, 480)">
         {/* Players title */}
         <g>
@@ -189,7 +207,12 @@ export function BoldPreview({
         </g>
 
         {/* Player list */}
-        <foreignObject x="0" y="24" width="740" height="76">
+        <foreignObject 
+          x="0" 
+          y="24" 
+          width="740" 
+          height={showAllPlayers ? previewHeight - 520 : 76}
+        >
           <div
             ref={containerRef}
             style={{
@@ -220,14 +243,14 @@ export function BoldPreview({
                   color: 'white',
                   fontSize: '14px',
                   fontWeight: 500,
-                  display: visiblePlayers.includes(player) ? 'inline-block' : 'none',
+                  display: showAllPlayers || visiblePlayers.includes(player) ? 'inline-block' : 'none',
                   whiteSpace: 'nowrap',
                 }}
               >
                 {player}
               </div>
             ))}
-            {hiddenCount > 0 && (
+            {!showAllPlayers && hiddenCount > 0 && (
               <div
                 style={{
                   background: 'rgba(0, 0, 0, 0.3)',
