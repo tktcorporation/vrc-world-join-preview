@@ -4,3 +4,5 @@ export interface CreateSharePreviewOptions {
   playerNameList: string[];
   isDarkMode: boolean;
 }
+
+export const PLAYER_COUNT_SUFFIX = ' more' as const;

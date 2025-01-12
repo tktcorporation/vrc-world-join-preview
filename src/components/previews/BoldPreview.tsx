@@ -1,4 +1,6 @@
 import type { PreviewProps } from './types';
+import { useEffect, useRef, useState } from 'react';
+import { PLAYER_COUNT_SUFFIX } from '../../types';
 
 export function BoldPreview({
   worldName,
@@ -8,6 +10,52 @@ export function BoldPreview({
   colors,
   previewRef,
 }: PreviewProps) {
+  const [visiblePlayers, setVisiblePlayers] = useState<string[]>([]);
+  const [hiddenCount, setHiddenCount] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const playerRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current;
+    const containerHeight = 76; // 固定の高さ
+    const containerWidth = 740; // 固定の幅
+    let currentRow = 0;
+    let currentWidth = 0;
+    const gap = 8;
+    const visible: string[] = [];
+    
+    // +N人 表示用の余白を確保（およそ100px）
+    const reservedWidth = 100;
+    const effectiveWidth = containerWidth - reservedWidth;
+    
+    // プレイヤー要素の位置を計算
+    for (const player of playerNameList) {
+      const element = playerRefs.current.get(player);
+      if (!element) continue;
+
+      const width = element.offsetWidth;
+      
+      if (currentWidth + width > effectiveWidth) {
+        currentRow++;
+        currentWidth = width + gap;
+      } else {
+        currentWidth += width + gap;
+      }
+
+      // 2行までに収まる場合のみ表示
+      if (currentRow < 2) {
+        visible.push(player);
+      } else {
+        break; // 2行を超えた時点で終了
+      }
+    }
+
+    setVisiblePlayers(visible);
+    setHiddenCount(playerNameList.length - visible.length);
+  }, [playerNameList]);
+
   return (
     <svg
       ref={previewRef}
@@ -136,24 +184,51 @@ export function BoldPreview({
             dominantBaseline="hanging"
             letterSpacing="0.05em"
           >
-            PLAYERS
+            PLAYERS ({playerNameList.length})
           </text>
         </g>
 
         {/* Player list */}
         <foreignObject x="0" y="24" width="740" height="76">
           <div
+            ref={containerRef}
             style={{
               display: 'flex',
               flexWrap: 'wrap',
               gap: '8px',
               width: '100%',
               alignContent: 'flex-start',
+              position: 'relative',
+              height: '100%',
+              overflow: 'hidden',
             }}
           >
             {playerNameList.map((player) => (
               <div
                 key={player}
+                ref={(el) => {
+                  if (el) {
+                    playerRefs.current.set(player, el);
+                  } else {
+                    playerRefs.current.delete(player);
+                  }
+                }}
+                style={{
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  padding: '6px 12px',
+                  borderRadius: '16px',
+                  color: 'white',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  display: visiblePlayers.includes(player) ? 'inline-block' : 'none',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {player}
+              </div>
+            ))}
+            {hiddenCount > 0 && (
+              <div
                 style={{
                   background: 'rgba(0, 0, 0, 0.3)',
                   padding: '6px 12px',
@@ -165,9 +240,9 @@ export function BoldPreview({
                   whiteSpace: 'nowrap',
                 }}
               >
-                {player}
+                +{hiddenCount}{PLAYER_COUNT_SUFFIX}
               </div>
-            ))}
+            )}
           </div>
         </foreignObject>
       </g>
