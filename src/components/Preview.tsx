@@ -34,7 +34,7 @@ export function Preview({
       {imageUrl && (
         <>
           {/* 背景画像を2回配置してより強い効果を得る */}
-          <div 
+          <div
             className="absolute inset-0"
             style={{
               backgroundImage: `url(${imageUrl})`,
@@ -42,10 +42,10 @@ export function Preview({
               backgroundPosition: 'center',
               filter: 'blur(100px) brightness(0.7)',
               transform: 'scale(1.5)',
-              opacity: 0.4
+              opacity: 0.4,
             }}
           />
-          <div 
+          <div
             className="absolute inset-0"
             style={{
               backgroundImage: `url(${imageUrl})`,
@@ -53,43 +53,43 @@ export function Preview({
               backgroundPosition: 'center',
               filter: 'blur(50px) brightness(0.8)',
               transform: 'scale(1.2)',
-              opacity: 0.3
+              opacity: 0.3,
             }}
           />
         </>
       )}
-      
+
       {/* オーバーレイグラデーション */}
-      <div 
+      <div
         className="absolute inset-0"
         style={{
           background: isDarkMode
             ? 'linear-gradient(165deg, rgba(17, 24, 39, 0.9) 0%, rgba(17, 24, 39, 0.95) 100%)'
-            : 'linear-gradient(165deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%)'
+            : 'linear-gradient(165deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%)',
         }}
       />
-      
+
       <div className="relative h-full flex flex-col p-8 z-10">
         {worldName && (
           <div className="relative">
-            <h1 
+            <h1
               className="text-4xl font-bold mb-6 tracking-tight"
               style={{
-                color: isDarkMode ? '#fff' : '#000'
+                color: isDarkMode ? '#fff' : '#000',
               }}
             >
               {worldName}
             </h1>
-            <div 
+            <div
               className="absolute bottom-0 left-0 w-32 h-1 rounded-full"
               style={{
                 background: colors.primary,
-                opacity: 0.5
+                opacity: 0.5,
               }}
             />
           </div>
         )}
-        
+
         <div className="flex-1 flex gap-8 items-stretch mt-4">
           {imageUrl && (
             <div className="relative w-[450px] h-[400px]">
@@ -102,25 +102,29 @@ export function Preview({
               <div className="absolute inset-0 rounded-2xl shadow-inner" />
             </div>
           )}
-          
+
           {playerNameList && playerNameList.length > 0 && (
             <div className="w-[250px] flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div 
+                <div
                   className="p-2 rounded-xl"
                   style={{
                     background: colors.primary,
-                    opacity: 0.8
+                    opacity: 0.8,
                   }}
                 >
                   <Users size={20} className="text-white" />
                 </div>
-                <h2 className="text-xl font-semibold tracking-tight">Players</h2>
+                <h2 className="text-xl font-semibold tracking-tight">
+                  Players
+                </h2>
               </div>
               <div className="flex-1">
-                <div className={`h-full rounded-2xl ${
-                  isDarkMode ? 'bg-gray-800/20' : 'bg-white/20'
-                } p-4 backdrop-blur-sm`}>
+                <div
+                  className={`h-full rounded-2xl ${
+                    isDarkMode ? 'bg-gray-800/20' : 'bg-white/20'
+                  } p-4 backdrop-blur-sm`}
+                >
                   <div className="grid gap-2">
                     {playerNameList.map((player, index) => (
                       <div

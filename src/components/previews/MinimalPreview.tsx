@@ -25,16 +25,20 @@ export function MinimalPreview({
           <>
             <linearGradient id="minimal-overlay" x1="0" y1="0" x2="0" y2="1">
               <stop offset="50%" stopColor="transparent" />
-              <stop offset="100%" stopColor={colors.primary} stopOpacity="0.5" />
+              <stop
+                offset="100%"
+                stopColor={colors.primary}
+                stopOpacity="0.5"
+              />
             </linearGradient>
-            
+
             <filter id="minimal-shadow">
               <feDropShadow dx="0" dy="2" stdDeviation="4" floodOpacity="0.1" />
             </filter>
           </>
         )}
       </defs>
-      
+
       {/* Content */}
       <g transform="translate(32, 32)">
         {/* Left column */}
@@ -52,7 +56,7 @@ export function MinimalPreview({
               {worldName}
             </text>
           )}
-          
+
           {/* Image */}
           {imageUrl && (
             <g transform="translate(0, 60)">
@@ -76,7 +80,7 @@ export function MinimalPreview({
             </g>
           )}
         </g>
-        
+
         {/* Right column - Players */}
         {playerNameList && playerNameList.length > 0 && (
           <g transform="translate(540, 0)">
@@ -103,19 +107,18 @@ export function MinimalPreview({
                 Players
               </text>
             </g>
-            
+
             {/* Player list */}
             <g transform="translate(0, 40)">
               {playerNameList.map((player, index) => (
-                <g
-                  key={index}
-                  transform={`translate(0, ${index * 36})`}
-                >
+                <g key={index} transform={`translate(0, ${index * 36})`}>
                   <rect
                     width="200"
                     height="28"
                     rx="6"
-                    fill={isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}
+                    fill={
+                      isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
+                    }
                   />
                   <text
                     x="12"

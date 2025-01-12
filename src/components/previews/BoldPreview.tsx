@@ -27,7 +27,7 @@ export function BoldPreview({
               <feGaussianBlur stdDeviation="80" />
               <feColorMatrix type="saturate" values="1.5" />
             </filter>
-            
+
             <pattern
               id="bg-image"
               patternUnits="userSpaceOnUse"
@@ -42,12 +42,16 @@ export function BoldPreview({
                 crossOrigin="anonymous"
               />
             </pattern>
-            
+
             <linearGradient id="overlay-gradient" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor={colors.primary} stopOpacity="0.9" />
-              <stop offset="100%" stopColor={colors.secondary} stopOpacity="0.9" />
+              <stop
+                offset="100%"
+                stopColor={colors.secondary}
+                stopOpacity="0.9"
+              />
             </linearGradient>
-            
+
             <linearGradient id="accent-line" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stopColor={colors.accent} />
               <stop offset="100%" stopColor={colors.accent} stopOpacity="0" />
@@ -55,7 +59,7 @@ export function BoldPreview({
           </>
         )}
       </defs>
-      
+
       {/* Main image */}
       {imageUrl && (
         <image
@@ -66,7 +70,7 @@ export function BoldPreview({
           crossOrigin="anonymous"
         />
       )}
-      
+
       {/* Background layers */}
       {imageUrl && (
         <>
@@ -77,14 +81,10 @@ export function BoldPreview({
             filter="url(#blur-effect)"
             opacity="0.6"
           />
-          <rect
-            width="100%"
-            height="100%"
-            fill="url(#overlay-gradient)"
-          />
+          <rect width="100%" height="100%" fill="url(#overlay-gradient)" />
         </>
       )}
-      
+
       {/* Content grid */}
       <g transform="translate(32, 32)">
         {/* Left column */}
@@ -112,7 +112,7 @@ export function BoldPreview({
               />
             </g>
           )}
-          
+
           {/* Players section */}
           {playerNameList && playerNameList.length > 0 && (
             <g transform="translate(0, 120)">
@@ -146,7 +146,7 @@ export function BoldPreview({
                   Players
                 </text>
               </g>
-              
+
               {/* Player list */}
               <g transform="translate(0, 60)">
                 {playerNameList.map((player, index) => {

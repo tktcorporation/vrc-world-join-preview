@@ -18,10 +18,14 @@ type PreviewStyle = keyof typeof PREVIEW_COMPONENTS;
 export function PreviewGenerator(props: CreateSharePreviewOptions) {
   const previewRef = useRef<SVGSVGElement>(null);
   const [selectedStyle, setSelectedStyle] = useState<PreviewStyle>('modern');
-  const [colors, setColors] = useState<{ primary: string; secondary: string; accent: string }>({
+  const [colors, setColors] = useState<{
+    primary: string;
+    secondary: string;
+    accent: string;
+  }>({
     primary: 'rgb(59, 130, 246)',
     secondary: 'rgb(147, 51, 234)',
-    accent: 'rgb(79, 70, 229)'
+    accent: 'rgb(79, 70, 229)',
   });
 
   useEffect(() => {
@@ -36,7 +40,11 @@ export function PreviewGenerator(props: CreateSharePreviewOptions) {
 
   const handleDownload = async () => {
     if (!previewRef.current) return;
-    await downloadPreview(previewRef.current, props.isDarkMode, props.worldName);
+    await downloadPreview(
+      previewRef.current,
+      props.isDarkMode,
+      props.worldName
+    );
   };
 
   const PreviewComponent = PREVIEW_COMPONENTS[selectedStyle];

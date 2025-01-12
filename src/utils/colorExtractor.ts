@@ -54,21 +54,21 @@ export function extractDominantColors(img: HTMLImageElement) {
   const imageData = getPixelData(img);
   const data = imageData.data;
   const colorBuckets: { [key: string]: ColorBucket } = {};
-  
+
   // 色のバケット化（似た色をグループ化）
   for (let i = 0; i < data.length; i += 4) {
     const r = Math.floor(data[i] / 10) * 10;
     const g = Math.floor(data[i + 1] / 10) * 10;
     const b = Math.floor(data[i + 2] / 10) * 10;
-    
+
     // HSLに変換して彩度と明度をチェック
     const [, s, l] = rgbToHsl(r, g, b);
-    
+
     // 彩度が低すぎる、または明度が極端な色は除外
     if (s < 0.1 || l < 0.1 || l > 0.9) continue;
-    
+
     const key = `${r},${g},${b}`;
-    
+
     if (colorBuckets[key]) {
       colorBuckets[key].count++;
     } else {
@@ -79,16 +79,24 @@ export function extractDominantColors(img: HTMLImageElement) {
   // 出現頻度でソート
   const sortedColors = Object.values(colorBuckets)
     .sort((a, b) => b.count - a.count)
-    .filter(bucket => bucket.count > 50); // ノイズ除去
+    .filter((bucket) => bucket.count > 50); // ノイズ除去
 
   // 最も出現頻度の高い色を取得
   const primary = sortedColors[0] || { r: 59, g: 130, b: 246 };
-  const secondary = sortedColors[Math.floor(sortedColors.length / 3)] || { r: 147, g: 51, b: 234 };
-  const accent = sortedColors[Math.floor(sortedColors.length / 2)] || { r: 79, g: 70, b: 229 };
+  const secondary = sortedColors[Math.floor(sortedColors.length / 3)] || {
+    r: 147,
+    g: 51,
+    b: 234,
+  };
+  const accent = sortedColors[Math.floor(sortedColors.length / 2)] || {
+    r: 79,
+    g: 70,
+    b: 229,
+  };
 
   return {
     primary: `rgb(${primary.r}, ${primary.g}, ${primary.b})`,
     secondary: `rgb(${secondary.r}, ${secondary.g}, ${secondary.b})`,
-    accent: `rgb(${accent.r}, ${accent.g}, ${accent.b})`
+    accent: `rgb(${accent.r}, ${accent.g}, ${accent.b})`,
   };
 }

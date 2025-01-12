@@ -33,7 +33,7 @@ export function ModernPreview({
                         0 0 0 1 0"
               />
             </filter>
-            
+
             <pattern
               id="modern-bg"
               patternUnits="userSpaceOnUse"
@@ -48,19 +48,30 @@ export function ModernPreview({
                 crossOrigin="anonymous"
               />
             </pattern>
-            
-            <linearGradient id="modern-text-gradient" x1="0" y1="0" x2="1" y2="0">
+
+            <linearGradient
+              id="modern-text-gradient"
+              x1="0"
+              y1="0"
+              x2="1"
+              y2="0"
+            >
               <stop offset="0%" stopColor={colors.primary} />
               <stop offset="100%" stopColor={colors.secondary} />
             </linearGradient>
-            
+
             <filter id="modern-shadow">
-              <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.15" />
+              <feDropShadow
+                dx="0"
+                dy="4"
+                stdDeviation="8"
+                floodOpacity="0.15"
+              />
             </filter>
           </>
         )}
       </defs>
-      
+
       {/* Background layers */}
       {imageUrl && (
         <>
@@ -79,7 +90,7 @@ export function ModernPreview({
           />
         </>
       )}
-      
+
       {/* Content */}
       <g transform="translate(32, 32)">
         {/* Title */}
@@ -95,7 +106,7 @@ export function ModernPreview({
             {worldName}
           </text>
         )}
-        
+
         {/* Main content */}
         <g transform="translate(0, 100)">
           {/* Image */}
@@ -115,7 +126,7 @@ export function ModernPreview({
               />
             </g>
           )}
-          
+
           {/* Players */}
           {playerNameList && playerNameList.length > 0 && (
             <g transform="translate(490, 0)">
@@ -148,19 +159,20 @@ export function ModernPreview({
                   Players
                 </text>
               </g>
-              
+
               {/* Player list */}
               <g transform="translate(0, 60)">
                 {playerNameList.map((player, index) => (
-                  <g
-                    key={index}
-                    transform={`translate(0, ${index * 50})`}
-                  >
+                  <g key={index} transform={`translate(0, ${index * 50})`}>
                     <rect
                       width="250"
                       height="40"
                       rx="12"
-                      fill={isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}
+                      fill={
+                        isDarkMode
+                          ? 'rgba(255,255,255,0.05)'
+                          : 'rgba(0,0,0,0.05)'
+                      }
                       stroke={`${colors.primary}25`}
                     />
                     <text

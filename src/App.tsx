@@ -14,13 +14,17 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
 
   const toggleDarkMode = () => {
-    setOptions(prev => ({ ...prev, isDarkMode: !prev.isDarkMode }));
+    setOptions((prev) => ({ ...prev, isDarkMode: !prev.isDarkMode }));
   };
 
   return (
-    <div className={`min-h-screen ${
-      options.isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900'
-    }`}>
+    <div
+      className={`min-h-screen ${
+        options.isDarkMode
+          ? 'bg-gray-800 text-white'
+          : 'bg-gray-100 text-gray-900'
+      }`}
+    >
       <div className="container mx-auto py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Preview Generator</h1>
@@ -46,9 +50,11 @@ export default function App() {
 
         <div className="grid grid-cols-1 gap-8">
           {showSettings && (
-            <div className={`p-6 rounded-lg ${
-              options.isDarkMode ? 'bg-gray-900' : 'bg-white'
-            } shadow-xl transition-all duration-300`}>
+            <div
+              className={`p-6 rounded-lg ${
+                options.isDarkMode ? 'bg-gray-900' : 'bg-white'
+              } shadow-xl transition-all duration-300`}
+            >
               <h2 className="text-xl font-semibold mb-4">Settings</h2>
               <div className="space-y-4">
                 <div>
@@ -56,35 +62,43 @@ export default function App() {
                   <input
                     type="text"
                     value={options.worldName}
-                    onChange={(e) => setOptions(prev => ({
-                      ...prev,
-                      worldName: e.target.value
-                    }))}
+                    onChange={(e) =>
+                      setOptions((prev) => ({
+                        ...prev,
+                        worldName: e.target.value,
+                      }))
+                    }
                     className="w-full p-2 rounded border bg-transparent"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block mb-2">Image URL</label>
                   <input
                     type="text"
                     value={options.imageUrl}
-                    onChange={(e) => setOptions(prev => ({
-                      ...prev,
-                      imageUrl: e.target.value
-                    }))}
+                    onChange={(e) =>
+                      setOptions((prev) => ({
+                        ...prev,
+                        imageUrl: e.target.value,
+                      }))
+                    }
                     className="w-full p-2 rounded border bg-transparent"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block mb-2">Players (one per line)</label>
                   <textarea
                     value={options.playerNameList.join('\n')}
-                    onChange={(e) => setOptions(prev => ({
-                      ...prev,
-                      playerNameList: e.target.value.split('\n').filter(Boolean)
-                    }))}
+                    onChange={(e) =>
+                      setOptions((prev) => ({
+                        ...prev,
+                        playerNameList: e.target.value
+                          .split('\n')
+                          .filter(Boolean),
+                      }))
+                    }
                     className="w-full p-2 rounded border bg-transparent h-32"
                   />
                 </div>
