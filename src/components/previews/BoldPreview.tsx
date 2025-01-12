@@ -14,10 +14,10 @@ export function BoldPreview({
   const [visiblePlayers, setVisiblePlayers] = useState<string[]>([]);
   const [hiddenCount, setHiddenCount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const playerRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const tempContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!tempContainerRef.current) return;
 
     if (showAllPlayers) {
       setVisiblePlayers(playerNameList);
@@ -25,11 +25,8 @@ export function BoldPreview({
       return;
     }
 
-    const container = containerRef.current;
-    const containerHeight = 76; // 固定の高さ
+    const container = tempContainerRef.current;
     const containerWidth = 740; // 固定の幅
-    let currentRow = 0;
-    let currentWidth = 0;
     const gap = 8;
     const visible: string[] = [];
     
@@ -37,28 +34,38 @@ export function BoldPreview({
     const reservedWidth = 100;
     const effectiveWidth = containerWidth - reservedWidth;
     
+    let currentRow = 0;
+    let currentWidth = 0;
+
+    // 一時的なdivを作成して幅を計算
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.visibility = 'hidden';
+    tempDiv.style.padding = '6px 12px';
+    tempDiv.style.whiteSpace = 'nowrap';
+    tempDiv.style.fontSize = '14px';
+    container.appendChild(tempDiv);
+
     // プレイヤー要素の位置を計算
     for (const player of playerNameList) {
-      const element = playerRefs.current.get(player);
-      if (!element) continue;
-
-      const width = element.offsetWidth;
+      tempDiv.textContent = player;
+      const width = tempDiv.offsetWidth;
       
-      if (currentWidth + width > effectiveWidth) {
+      if (currentWidth + width + gap > effectiveWidth) {
         currentRow++;
         currentWidth = width + gap;
       } else {
         currentWidth += width + gap;
       }
 
-      // 2行までに収まる場合のみ表示
       if (currentRow < 2) {
         visible.push(player);
       } else {
-        break; // 2行を超えた時点で終了
+        break;
       }
     }
 
+    container.removeChild(tempDiv);
     setVisiblePlayers(visible);
     setHiddenCount(playerNameList.length - visible.length);
   }, [playerNameList, showAllPlayers]);
@@ -73,6 +80,8 @@ export function BoldPreview({
   };
 
   const previewHeight = calculatePreviewHeight();
+  const playersSectionY = 480;
+  const playerListHeight = showAllPlayers ? previewHeight - playersSectionY - 40 : 76; // 余白を40pxに調整
 
   return (
     <svg
@@ -208,7 +217,7 @@ export function BoldPreview({
       </g>
 
       {/* Players section - positioned relative to bottom */}
-      <g transform="translate(32, 480)">
+      <g transform={`translate(32, ${playersSectionY})`}>
         {/* Players title */}
         <g>
           <text
@@ -229,8 +238,9 @@ export function BoldPreview({
           x="0" 
           y="24" 
           width="740" 
-          height={showAllPlayers ? previewHeight - 520 : 76}
+          height={playerListHeight}
         >
+          <div ref={tempContainerRef} style={{ position: 'absolute', visibility: 'hidden' }} />
           <div
             ref={containerRef}
             style={{
@@ -242,18 +252,12 @@ export function BoldPreview({
               position: 'relative',
               height: '100%',
               overflow: 'hidden',
+              paddingBottom: '16px',
             }}
           >
-            {playerNameList.map((player) => (
+            {(showAllPlayers ? playerNameList : visiblePlayers).map((player) => (
               <div
                 key={player}
-                ref={(el) => {
-                  if (el) {
-                    playerRefs.current.set(player, el);
-                  } else {
-                    playerRefs.current.delete(player);
-                  }
-                }}
                 style={{
                   background: 'rgba(0, 0, 0, 0.3)',
                   padding: '6px 12px',
@@ -261,8 +265,12 @@ export function BoldPreview({
                   color: 'white',
                   fontSize: '14px',
                   fontWeight: 500,
-                  display: showAllPlayers || visiblePlayers.includes(player) ? 'inline-block' : 'none',
+                  display: 'inline-block',
                   whiteSpace: 'nowrap',
+                  marginBottom: '2px',
+                  height: '30px',
+                  lineHeight: '18px',
+                  boxSizing: 'border-box',
                 }}
               >
                 {player}
@@ -279,6 +287,10 @@ export function BoldPreview({
                   fontWeight: 500,
                   display: 'inline-block',
                   whiteSpace: 'nowrap',
+                  marginBottom: '2px',
+                  height: '30px',
+                  lineHeight: '18px',
+                  boxSizing: 'border-box',
                 }}
               >
                 +{hiddenCount}{PLAYER_COUNT_SUFFIX}
