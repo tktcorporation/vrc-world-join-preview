@@ -1,7 +1,8 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "vrc-world-join-preview",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "VRChat world join link preview generator",
   "type": "module",
   "scripts": {
     "dev": "vite",
