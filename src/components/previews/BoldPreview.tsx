@@ -79,17 +79,29 @@ export function BoldPreview({
       {/* Content grid */}
       <g transform="translate(32, 32)">
         {/* Title section */}
-        <text
-          x="0"
-          y="0"
-          fontSize="48"
-          fontWeight="700"
-          fill="white"
-          dominantBaseline="hanging"
-          filter="url(#soft-shadow)"
-        >
-          {worldName}
-        </text>
+        <g>
+          <text
+            x="0"
+            y="0"
+            fontSize="32"
+            fontWeight="700"
+            fill="white"
+            dominantBaseline="hanging"
+            filter="url(#soft-shadow)"
+          >
+            {worldName}
+          </text>
+          <rect
+            x="0"
+            y="42"
+            width="240"
+            height="4"
+            rx="2"
+            fill={colors.accent}
+            opacity="0.9"
+            filter="url(#soft-shadow)"
+          />
+        </g>
       </g>
 
       {/* Players section - positioned at bottom */}
